@@ -7,19 +7,24 @@ import (
 	"net/http"
 	"strings"
 )
-const DefautlBaseUrl  = "https://donordrive.com/"
-const ExtraLifeUrl    = "https://www.extra-life.org"
+
+const DefautlBaseUrl = "https://donordrive.com/"
+const ExtraLifeUrl = "https://www.extra-life.org"
 const TryBaseUrl = "https://try.donordrive.com/"
 
 var baseUrl = DefautlBaseUrl
 var client = &http.Client{}
+
 const (
-	apiEvents = "api/events"
-	apiEventsTeam = "api/events/%d/teams"
-	apiTeamParticipants = "api/teams/%d/participants"
-	apiParticipantDetails = "api/participants/%d"
-	apiParticipantDonations = "api/participants/%d/donations"
-	apiParticipantsTopDonor = "api/participants/%d/donors"
+	apiEvents                = "api/events"
+	apiEventsTeam            = "api/events/%d/teams"
+	apiTeamParticipants      = "api/teams/%d/participants"
+	apiTeamBadges            = "api/team/%d/badges"
+	apiParticipantBadges     = "api/participants/%d/badges"
+	apiParticipantDetails    = "api/participants/%d"
+	apiParticipantDonations  = "api/participants/%d/donations"
+	apiParticipantMilestones = "api/participants/%d/milestones"
+	apiParticipantsTopDonor  = "api/participants/%d/donors"
 )
 
 func GetBaseUrl() string {
@@ -36,7 +41,7 @@ func SetBaseUrl(url string) {
 	baseUrl += "/"
 }
 
-func GetEvents() ([]Event, error){
+func GetEvents() ([]Event, error) {
 	res, err := client.Get(fmt.Sprintf("%s%s", baseUrl, apiEvents))
 	if err != nil {
 		return nil, err
@@ -67,6 +72,86 @@ func GetTeamParticipants(team int) ([]Participant, error) {
 	}
 
 	var results []Participant
+
+	decoder := json.NewDecoder(res.Body)
+	if err := decoder.Decode(&results); err != nil {
+		return nil, err
+	}
+	return results, nil
+}
+
+func GetParticipantDonations(participantID int) ([]Donation, error) {
+	participantPath := fmt.Sprintf(apiParticipantDonations, participantID)
+	res, err := client.Get(fmt.Sprintf("%s%s", baseUrl, participantPath))
+	if err != nil {
+		return nil, err
+	}
+
+	if res.StatusCode != 200 {
+		return nil, errors.New(fmt.Sprintf("%d returned", res.StatusCode))
+	}
+
+	var results []Donation
+
+	decoder := json.NewDecoder(res.Body)
+	if err := decoder.Decode(&results); err != nil {
+		return nil, err
+	}
+	return results, nil
+}
+
+func GetParticipantMilestones(participantID int) ([]Milestone, error) {
+	participantPath := fmt.Sprintf(apiParticipantMilestones, participantID)
+	res, err := client.Get(fmt.Sprintf("%s%s", baseUrl, participantPath))
+	if err != nil {
+		return nil, err
+	}
+
+	if res.StatusCode != 200 {
+		return nil, errors.New(fmt.Sprintf("%d returned", res.StatusCode))
+	}
+
+	var results []Milestone
+
+	decoder := json.NewDecoder(res.Body)
+	if err := decoder.Decode(&results); err != nil {
+		return nil, err
+	}
+	return results, nil
+}
+
+func GetParticipantDetails(participantID int) (*Participant, error) {
+	participantPath := fmt.Sprintf(apiParticipantDetails, participantID)
+	res, err := client.Get(fmt.Sprintf("%s%s", baseUrl, participantPath))
+	if err != nil {
+		return nil, err
+	}
+
+	if res.StatusCode != 200 {
+		return nil, errors.New(fmt.Sprintf("%d returned", res.StatusCode))
+	}
+
+	result := &Participant{}
+
+	decoder := json.NewDecoder(res.Body)
+	if err := decoder.Decode(result); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func GetParticipantBadges(participantID int) ([]Badge, error) {
+	participantPath := fmt.Sprintf(apiParticipantBadges, participantID)
+	res, err := client.Get(fmt.Sprintf("%s%s", baseUrl, participantPath))
+	if err != nil {
+		return nil, err
+	}
+
+	if res.StatusCode != 200 {
+		return nil, errors.New(fmt.Sprintf("%d returned", res.StatusCode))
+	}
+
+	var results []Badge
 
 	decoder := json.NewDecoder(res.Body)
 	if err := decoder.Decode(&results); err != nil {
