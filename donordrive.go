@@ -18,6 +18,7 @@ var client = &http.Client{}
 const (
 	apiEvents                = "api/events"
 	apiEventsTeam            = "api/events/%d/teams"
+	apiTeam                  = "api/teams/%d"
 	apiTeamParticipants      = "api/teams/%d/participants"
 	apiTeamBadges            = "api/team/%d/badges"
 	apiParticipantBadges     = "api/participants/%d/badges"
@@ -78,6 +79,26 @@ func GetTeamParticipants(team int) ([]Participant, error) {
 		return nil, err
 	}
 	return results, nil
+}
+
+func GetTeam(team int) (*Team, error) {
+	teamPath := fmt.Sprintf(apiTeam, team)
+	res, err := client.Get(fmt.Sprintf("%s%s", baseUrl, teamPath))
+	if err != nil {
+		return nil, err
+	}
+
+	if res.StatusCode != 200 {
+		return nil, errors.New(fmt.Sprintf("%d returned", res.StatusCode))
+	}
+
+	var result *Team
+
+	decoder := json.NewDecoder(res.Body)
+	if err := decoder.Decode(result); err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
 func GetParticipantDonations(participantID int) ([]Donation, error) {
