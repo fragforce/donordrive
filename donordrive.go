@@ -81,8 +81,8 @@ func GetTeamParticipants(team int) ([]Participant, error) {
 	return results, nil
 }
 
-func GetTeam(team int) (*Team, error) {
-	teamPath := fmt.Sprintf(apiTeam, team)
+func GetTeam(teamID int) (*Team, error) {
+	teamPath := fmt.Sprintf(apiTeam, teamID)
 	res, err := client.Get(fmt.Sprintf("%s%s", baseUrl, teamPath))
 	if err != nil {
 		return nil, err
