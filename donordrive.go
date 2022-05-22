@@ -92,13 +92,13 @@ func GetTeam(team int) (*Team, error) {
 		return nil, errors.New(fmt.Sprintf("%d returned", res.StatusCode))
 	}
 
-	var result *Team
+	result := Team{}
 
 	decoder := json.NewDecoder(res.Body)
-	if err := decoder.Decode(result); err != nil {
+	if err := decoder.Decode(&result); err != nil {
 		return nil, err
 	}
-	return result, nil
+	return &result, nil
 }
 
 func GetParticipantDonations(participantID int) ([]Donation, error) {
