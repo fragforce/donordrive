@@ -1,26 +1,33 @@
 package donordrive
 
 type Team struct {
-	AvatarImageURL     string  `json:"avatarImageURL"`
-	CaptainDisplayName string  `json:"captainDisplayName"`
-	CreatedDateUTC     string  `json:"createdDateUTC"`
-	EventID            int     `json:"eventID"`
-	EventName          string  `json:"eventName"`
-	FundraisingGoal    string  `json:"fundraisingGoal"`
-	IsInviteOnly       bool    `json:"isInviteOnly"`
-	Links              *Links  `json:"links"`
-	Name               string  `json:"name"`
-	NumAwardedBadges   int     `json:"numAwardedBadges"`
-	NumDonations       int     `json:"numDonations"`
-	NumParticipants    int     `json:"numParticipants"`
-	StreamIsLive       bool    `json:"streamIsLive"`
-	SumDonations       float32 `json:"sumDonations"`
-	SumPledges         float32 `json:"sumPledges"`
-	TeamID             int     `json:"teamID"`
+	AvatarImageURL       *string  `json:"avatarImageURL,omitempty"`
+	CaptainDisplayName   *string  `json:"captainDisplayName,omitempty"`
+	CreatedDateUTC       *string  `json:"createdDateUTC,omitempty"`
+	EventID              *int     `json:"eventID,omitempty"`
+	EventName            *string  `json:"eventName,omitempty"`
+	FundraisingGoal      *int     `json:"fundraisingGoal,omitempty"`
+	IsInviteOnly         *bool    `json:"isInviteOnly,omitempty"`
+	Links                *Links   `json:"links,omitempty"`
+	Name                 *string  `json:"name,omitempty"`
+	NumAwardedBadges     *int     `json:"numAwardedBadges,omitempty"`
+	NumDonations         *int     `json:"numDonations,omitempty"`
+	NumParticipants      *int     `json:"numParticipants,omitempty"`
+	StreamIsLive         *bool    `json:"streamIsLive,omitempty"`
+	SumDonations         *float32 `json:"sumDonations,omitempty"`
+	SumPledges           *float32 `json:"sumPledges,omitempty"`
+	TeamID               *int     `json:"teamID,omitempty"`
+	HasActivityTracking  *bool    `json:"hasActivityTracking,omitempty"`
+	SourceTeamID         *int     `json:"sourceTeamID,omitempty"`
+	HasTeamOnlyDonations *bool    `json:"hasTeamOnlyDonations,omitempty"`
+	StreamIsEnabled      *bool    `json:"streamIsEnabled,omitempty"`
+	StreamingPlatform    *string  `json:"streamingPlatform,omitempty"`
+	StreamingChannel     *string  `json:"streamingChannel,omitempty"`
+	IsCustomAvatarImage  *bool    `json:"isCustomAvatarImage,omitempty"`
 }
 
 type Links struct {
-	Donate string `json:"donate"`
-	Page   string `json:"page"`
-	Stream string `json:"stream"`
+	Donate *string `json:"donate,omitempty"`
+	Page   *string `json:"page,omitempty"`
+	Stream *string `json:"stream,omitempty"`
 }
